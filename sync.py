@@ -3,7 +3,9 @@ from optparse import OptionParser
 from filecmp import dircmp, cmp
 from os import remove
 from shutil import copytree, copy, rmtree
+from datetime import datetime
 import os
+import time
 
 def log(text, logfile):
     print(text)
@@ -48,8 +50,11 @@ def main():
         exit()
 
     logfile = open(options.logfile, "w")
-    deep_sync(options.source, options.target, logfile)
-    logfile.close()
+    while(True):
+        log("SYNC ATTEMPT AT " + str(datetime.now()), logfile)
+        deep_sync(options.source, options.target, logfile)
+        log("SYNC COMPLETE AT " + str(datetime.now()), logfile)
+        time.sleep(int(options.interval) * 60)
 
 if __name__=="__main__":
     main()
